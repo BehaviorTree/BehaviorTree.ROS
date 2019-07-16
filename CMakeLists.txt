@@ -12,7 +12,8 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 ######################################################
 
-set(ROS_DEPENDENCIES roscpp std_msgs message_generation behaviortree_cpp)
+set(ROS_DEPENDENCIES
+    roscpp std_msgs behaviortree_cpp_v3 actionlib_msgs actionlib message_generation)
 
 find_package(catkin REQUIRED COMPONENTS ${ROS_DEPENDENCIES} )
 find_package(GTest)
@@ -45,9 +46,12 @@ include_directories( include ${catkin_INCLUDE_DIRS})
 # LIBRARIES
 
 add_library(behaviortree_ros
-    src/loggers/rosout_logger.cpp )
+    src/loggers/rosout_logger.cpp
+    src/actions/movebase_client.cpp
+    )
 
 target_link_libraries(behaviortree_ros ${catkin_LIBRARIES})
+
 
 ######################################################
 # TESTS
