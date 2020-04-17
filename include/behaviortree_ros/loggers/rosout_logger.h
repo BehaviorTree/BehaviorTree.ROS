@@ -1,7 +1,7 @@
 #ifndef BT_ROSOUT_LOGGER_H
 #define BT_ROSOUT_LOGGER_H
 
-#include <behaviortree_cpp/loggers/abstract_logger.h>
+#include <behaviortree_cpp_v3/loggers/abstract_logger.h>
 #include <ros/console.h>
 
 namespace BT
