@@ -51,28 +51,24 @@ catkin_package(
 
 include_directories( include ${catkin_INCLUDE_DIRS})
 
-
 ######################################################
 # LIBRARIES
 
-add_library(behaviortree_ros
-    src/loggers/rosout_logger.cpp
-    src/bt_service_node.cpp
-    )
+#header only for the time being
 
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
-
+#add_library(behaviortree_ros ... )
+#target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
 
 ######################################################
 # TESTS
 
 add_executable(test_bt test/test_bt.cpp)
 add_dependencies(test_bt ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(test_bt ${catkin_LIBRARIES} ${PROJECT_NAME})
+target_link_libraries(test_bt ${catkin_LIBRARIES} )
 
 add_executable(test_server test/test_server.cpp)
 add_dependencies(test_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(test_server ${catkin_LIBRARIES} ${PROJECT_NAME})
+target_link_libraries(test_server ${catkin_LIBRARIES} )
 
 ######################################################
 # INSTALL

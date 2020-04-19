@@ -6,7 +6,15 @@ to develop Behavior Trees in C++.
 The library is not particularly opinionated about the way Actions and Conditions should be created; this gives
 more freedom to the developer, but can also be confusing for those people which are getting started with it.
 
-[BehaviorTree.ROS](https://github.com/BehaviorTree/BehaviorTree.ROS) provides some practical examples and 
-utilities related to [ROS (the Robotic Operative System)](http://www.ros.org).
+Consequently, many people in the [ROS](http://www.ros.org) community asked for examples and guidelines;
+this repository try to provide some basic examples.
 
-ROS users can use this library or look at the way Nodes are implemented to implmenent their own version.
+Currently, two wrappers are provided:
+
+- [RosServiceNode](include/behaviortree_ros/bt_service_node.h), which can be used to call
+  [ROS Services](http://wiki.ros.org/Services)
+
+- [RosActionNode](include/behaviortree_ros/bt_service_node.h) that, similarly, is a wrapper around
+  [actionlib::SimpleActionClient](http://wiki.ros.org/actionlib).
+
+

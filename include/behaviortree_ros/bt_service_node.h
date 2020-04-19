@@ -24,6 +24,9 @@
 namespace BT
 {
 
+/**
+ * Base Action to implement a ROS Service
+ */
 template<class ServiceT>
 class RosServiceNode : public BT::SyncActionNode
 {
@@ -34,23 +37,26 @@ protected:
 
 public:
 
-  using ServiceType = ServiceT;
-  using RequestType = typename ServiceT::Request;
+  using BaseClass    = RosServiceNode<ServiceT>;
+  using ServiceType  = ServiceT;
+  using RequestType  = typename ServiceT::Request;
   using ResponseType = typename ServiceT::Response;
 
   RosServiceNode() = delete;
 
   virtual ~RosServiceNode() = default;
 
+  /// These ports will be added automatically if this Node is
+  /// registered using RegisterRosAction<DeriveClass>()
   static PortsList providedPorts()
   {
     return  {
       InputPort<std::string>("service_name", "name of the ROS service"),
-      InputPort<unsigned>("timeout", 100, "timeout to connect (milliseconds)")
+      InputPort<unsigned>("timeout", 100, "timeout to connect to server (milliseconds)")
       };
   }
 
-  /// User must implement this method
+  /// User must implement this method.
   virtual void sendRequest(RequestType& request) = 0;
 
   /// Method (to be implemented by the user) to receive the reply.

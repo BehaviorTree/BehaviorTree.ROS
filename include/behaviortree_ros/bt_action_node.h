@@ -24,6 +24,17 @@
 namespace BT
 {
 
+/** Helper Node to call an actionlib::SimpleActionClient<>
+ * inside a BT::ActionNode.
+ *
+ * Note that the user must implement the methods:
+ *
+ *  - sendGoal
+ *  - onResult
+ *  - onFailedRequest
+ *  - halt (optionally)
+ *
+ */
 template<class ActionT>
 class RosActionNode : public BT::ActionNodeBase
 {
@@ -48,6 +59,8 @@ public:
 
   virtual ~RosActionNode() = default;
 
+  /// These ports will be added automatically if this Node is
+  /// registered using RegisterRosAction<DeriveClass>()
   static PortsList providedPorts()
   {
     return  {
@@ -56,12 +69,14 @@ public:
       };
   }
 
+  /// Method called when the Action makes a transition from IDLE to RUNNING.
+  /// If it return false, the entire action is immediately aborted, it returns
+  /// FAILURE and no request is sent to the server.
   virtual bool sendGoal(GoalType& goal) = 0;
 
   /// Method (to be implemented by the user) to receive the reply.
   /// User can decide which NodeStatus it will return (SUCCESS or FAILURE).
   virtual NodeStatus onResult( const ResultType& res) = 0;
-
 
   enum FailureCause{
     MISSING_SERVER = 0,
@@ -75,6 +90,10 @@ public:
     return NodeStatus::FAILURE;
   }
 
+  /// If you override this method, you MUST call this implementation invoking:
+  ///
+  ///    BaseClass::halt()
+  ///
   virtual void halt() override
   {
     if( status() == NodeStatus::RUNNING )
@@ -92,7 +111,6 @@ protected:
 
   BT::NodeStatus tick() override
   {
-
     unsigned msec = getInput<unsigned>("timeout").value();
     ros::Duration timeout(static_cast<double>(msec) * 1e-3);
 
@@ -112,7 +130,6 @@ protected:
       {
         return NodeStatus::FAILURE;
       }
-
       action_client_->sendGoal(goal);
     }
 
