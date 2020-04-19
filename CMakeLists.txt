@@ -1,19 +1,18 @@
-cmake_minimum_required(VERSION 2.8.12) # version on Ubuntu Trusty
+cmake_minimum_required(VERSION 3.5.1) # version on Ubuntu Trusty
 project(behaviortree_ros)
 
-if(NOT CMAKE_VERSION VERSION_LESS 3.1)
-    set(CMAKE_CXX_STANDARD 11)
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
-else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-endif()
-
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 ######################################################
 
 set(ROS_DEPENDENCIES
-    roscpp std_msgs behaviortree_cpp_v3 actionlib_msgs actionlib message_generation)
+    roscpp std_msgs
+    behaviortree_cpp_v3
+    actionlib_msgs
+    actionlib
+    message_generation)
 
 find_package(catkin REQUIRED COMPONENTS ${ROS_DEPENDENCIES} )
 find_package(GTest)
@@ -28,9 +27,20 @@ add_message_files(
   TreeNode.msg
 )
 
+add_service_files(
+   FILES
+   AddTwoInts.srv
+ )
+
+add_action_files(
+   DIRECTORY action
+   FILES     Fibonacci.action
+)
+
 generate_messages(
   DEPENDENCIES
   std_msgs
+  actionlib_msgs
 )
 
 catkin_package(
@@ -47,15 +57,22 @@ include_directories( include ${catkin_INCLUDE_DIRS})
 
 add_library(behaviortree_ros
     src/loggers/rosout_logger.cpp
-    src/actions/movebase_client.cpp
+    src/bt_service_node.cpp
     )
 
-target_link_libraries(behaviortree_ros ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
 
 
 ######################################################
 # TESTS
 
+add_executable(test_bt test/test_bt.cpp)
+add_dependencies(test_bt ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(test_bt ${catkin_LIBRARIES} ${PROJECT_NAME})
+
+add_executable(test_server test/test_server.cpp)
+add_dependencies(test_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(test_server ${catkin_LIBRARIES} ${PROJECT_NAME})
 
 ######################################################
 # INSTALL
