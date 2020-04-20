@@ -14,7 +14,7 @@ Currently, two wrappers are provided:
 - [RosServiceNode](include/behaviortree_ros/bt_service_node.h), which can be used to call
   [ROS Services](http://wiki.ros.org/Services)
 
-- [RosActionNode](include/behaviortree_ros/bt_service_node.h) that, similarly, is a wrapper around
+- [RosActionNode](include/behaviortree_ros/bt_action_node.h) that, similarly, is a wrapper around
   [actionlib::SimpleActionClient](http://wiki.ros.org/actionlib).
 
 
