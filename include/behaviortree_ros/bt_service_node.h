@@ -63,6 +63,13 @@ public:
   /// User can decide which NodeStatus it will return (SUCCESS or FAILURE).
   virtual NodeStatus onResponse( const ResponseType& rep) = 0;
 
+  /// Called to retrieve the action server name. Can be overriden by the user.
+  virtual std::string getServiceName()
+  {
+    return getInput<std::string>("service_name").value();
+  }
+
+
   enum FailureCause{
     MISSING_SERVER = 0,
     FAILED_CALL = 1
@@ -86,7 +93,7 @@ protected:
   BT::NodeStatus tick() override
   {
     if( !service_client_.isValid() ){
-      std::string server = getInput<std::string>("service_name").value();
+      std::string server = getServiceName();
       service_client_ = node_.serviceClient<ServiceT>( server );
     }
 
