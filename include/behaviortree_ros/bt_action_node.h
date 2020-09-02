@@ -33,7 +33,7 @@ namespace BT
  *  - onResult
  *  - onFailedRequest
  *  - halt (optionally)
- *
+ *  - getServerName (optionally)
  */
 template<class ActionT>
 class RosActionNode : public BT::ActionNodeBase
@@ -43,7 +43,7 @@ protected:
   RosActionNode(ros::NodeHandle& nh, const std::string& name, const BT::NodeConfiguration & conf):
   BT::ActionNodeBase(name, conf), node_(nh)
   {
-    const std::string server_name = getInput<std::string>("server_name").value();
+    const std::string server_name = getServerName();
     action_client_ = std::make_shared<ActionClientType>( node_, server_name, true );
   }
 
@@ -77,6 +77,13 @@ public:
   /// Method (to be implemented by the user) to receive the reply.
   /// User can decide which NodeStatus it will return (SUCCESS or FAILURE).
   virtual NodeStatus onResult( const ResultType& res) = 0;
+
+  /// Called to retrieve the action server name. Can be overriden by the user.
+  virtual std::string getServerName()
+  {
+    return getInput<std::string>("server_name").value();
+  }
+
 
   enum FailureCause{
     MISSING_SERVER = 0,
