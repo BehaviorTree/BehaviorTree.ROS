@@ -48,15 +48,15 @@ void RosoutLogger::callback(Duration timestamp, const TreeNode& node, NodeStatus
     case ros::console::Level::Debug :
         ROS_DEBUG("[%s%s]: %s -> %s",  node_name.c_str(),
                   &whitespaces[std::min(ws_count, node_name.size())],
-                  toStr(prev_status, true),
-                  toStr(status, true));
+                  toStr(prev_status, true).c_str(),
+                  toStr(status, true).c_str());
         break;
 
     case ros::console::Level::Info :
         ROS_INFO("[%s%s]: %s -> %s",  node_name.c_str(),
                   &whitespaces[std::min(ws_count, node_name.size())],
-                  toStr(prev_status, true),
-                  toStr(status, true));
+                  toStr(prev_status, true).c_str(),
+                  toStr(status, true).c_srt());
         break;
     }
 }
