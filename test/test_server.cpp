@@ -2,6 +2,7 @@
 #include <actionlib/server/simple_action_server.h>
 #include <behaviortree_ros/AddTwoInts.h>
 #include <behaviortree_ros/FibonacciAction.h>
+#include <behaviortree_ros/bt_action_node.h>
 
 bool Add(behaviortree_ros::AddTwoInts::Request  &req,
          behaviortree_ros::AddTwoInts::Response &res)

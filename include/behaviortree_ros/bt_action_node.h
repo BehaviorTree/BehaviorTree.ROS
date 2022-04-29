@@ -81,7 +81,8 @@ public:
   enum FailureCause{
     MISSING_SERVER = 0,
     ABORTED_BY_SERVER = 1,
-    REJECTED_BY_SERVER = 2
+    REJECTED_BY_SERVER = 2,
+    OTHER
   };
 
   /// Called when a service call failed. Can be overriden by the user.
@@ -98,8 +99,15 @@ public:
   {
     if( status() == NodeStatus::RUNNING )
     {
-      action_client_->cancelGoal();
+      ros::spinOnce();
+      auto action_state = action_client_->getState();
+
+      if( !action_state.isDone() )
+      {
+        action_client_->cancelGoal();
+      }
     }
+
     setStatus(NodeStatus::IDLE);
   }
 
@@ -134,12 +142,12 @@ protected:
     }
 
     // RUNNING
+    ros::spinOnce();
     auto action_state = action_client_->getState();
 
     // Please refer to these states
 
-    if( action_state == actionlib::SimpleClientGoalState::PENDING ||
-        action_state == actionlib::SimpleClientGoalState::ACTIVE )
+    if( !action_state.isDone() )
     {
       return NodeStatus::RUNNING;
     }
@@ -158,8 +166,11 @@ protected:
     else
     {
       // FIXME: is there any other valid state we should consider?
-      throw std::logic_error("Unexpected state in RosActionNode::tick()");
+      ROS_ERROR("Unexpected state in RosActionNode::tick(): %s", action_state.toString().c_str());
+      return onFailedRequest( OTHER );
     }
+    // this code is unreachable. Adding this just to avoid warnings
+    return status();
   }
 };
 
