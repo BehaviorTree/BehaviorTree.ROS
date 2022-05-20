@@ -166,12 +166,12 @@ private:
                         sum = "{add_two_result}" />
             <PrintValue message="{add_two_result}"/>
 
-            <RetryUntilSuccesful num_attempts="4">
+            <RetryUntilSuccessful num_attempts="4">
                 <Timeout msec="300">
                     <Fibonacci server_name="fibonacci" order="5"
                                result="{fibonacci_result}" />
                 </Timeout>
-            </RetryUntilSuccesful>
+            </RetryUntilSuccessful>
             <PrintValue message="{fibonacci_result}"/>
         </Sequence>
      </BehaviorTree>
