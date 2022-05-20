@@ -94,8 +94,8 @@ class FibonacciServer: public RosActionNode<behaviortree_ros::FibonacciAction>
 {
 
 public:
-  FibonacciServer( ros::NodeHandle& handle, const std::string& name, const NodeConfiguration & conf):
-RosActionNode<behaviortree_ros::FibonacciAction>(handle, name, conf) {}
+  FibonacciServer( ros::NodeHandle& handle, const std::string& name, const NodeConfiguration & conf, const std::string& server_name):
+RosActionNode<behaviortree_ros::FibonacciAction>(handle, name, conf, server_name) {}
 
   static PortsList providedPorts()
   {

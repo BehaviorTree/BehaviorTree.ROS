@@ -40,11 +40,11 @@ class RosActionNode : public BT::ActionNodeBase
 {
 protected:
 
-  RosActionNode(ros::NodeHandle& nh, const std::string& name, const BT::NodeConfiguration & conf):
+  RosActionNode(ros::NodeHandle& nh, const std::string& name, const BT::NodeConfiguration & conf, const std::string& server_name):
   BT::ActionNodeBase(name, conf), node_(nh)
   {
-    const std::string server_name = getInput<std::string>("server_name").value();
-    action_client_ = std::make_shared<ActionClientType>( node_, server_name, true );
+    const std::string server_name_ = server_name.empty() ? getInput<std::string>("server_name").value() : server_name;
+    action_client_ = std::make_shared<ActionClientType>( node_, server_name_, true );
   }
 
 public:
@@ -172,7 +172,7 @@ template <class DerivedT> static
                          ros::NodeHandle& node_handle)
 {
   NodeBuilder builder = [&node_handle](const std::string& name, const NodeConfiguration& config) {
-    return std::make_unique<DerivedT>(node_handle, name, config );
+    return std::make_unique<DerivedT>(node_handle, name, config, "" );
   };
 
   TreeNodeManifest manifest;
