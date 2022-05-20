@@ -40,11 +40,17 @@ class RosActionNode : public BT::ActionNodeBase
 {
 protected:
 
+  RosActionNode(ros::NodeHandle& nh, const std::string& name, const BT::NodeConfiguration & conf):
+  BT::ActionNodeBase(name, conf), node_(nh)
+  {
+    const std::string server_name = getInput<std::string>("server_name").value();
+    action_client_ = std::make_shared<ActionClientType>( node_, server_name, true );
+  }
+
   RosActionNode(ros::NodeHandle& nh, const std::string& name, const BT::NodeConfiguration & conf, const std::string& server_name):
   BT::ActionNodeBase(name, conf), node_(nh)
   {
-    const std::string server_name_ = server_name.empty() ? getInput<std::string>("server_name").value() : server_name;
-    action_client_ = std::make_shared<ActionClientType>( node_, server_name_, true );
+    action_client_ = std::make_shared<ActionClientType>( node_, server_name, true );
   }
 
 public:
@@ -64,7 +70,7 @@ public:
   static PortsList providedPorts()
   {
     return  {
-      InputPort<std::string>("server_name", "name of the Action Server"),
+      InputPort<std::string>("server_name", "", "name of the Action Server"),
       InputPort<unsigned>("timeout", 500, "timeout to connect (milliseconds)")
       };
   }
@@ -166,6 +172,24 @@ protected:
 
 /// Method to register the service into a factory.
 /// It gives you the opportunity to set the ros::NodeHandle.
+template <class DerivedT> static
+  void RegisterRosAction(BT::BehaviorTreeFactory& factory,
+                         const std::string& registration_ID,
+                         ros::NodeHandle& node_handle)
+{
+  NodeBuilder builder = [&node_handle](const std::string& name, const NodeConfiguration& config) {
+    return std::make_unique<DerivedT>(node_handle, name, config );
+  };
+
+  TreeNodeManifest manifest;
+  manifest.type = getType<DerivedT>();
+  manifest.ports = DerivedT::providedPorts();
+  manifest.registration_ID = registration_ID;
+  const auto& basic_ports = RosActionNode< typename DerivedT::ActionType>::providedPorts();
+  manifest.ports.insert( basic_ports.begin(), basic_ports.end() );
+  factory.registerBuilder( manifest, builder );
+}
+
 template <class DerivedT> static
   void RegisterRosAction(BT::BehaviorTreeFactory& factory,
                          const std::string& registration_ID,

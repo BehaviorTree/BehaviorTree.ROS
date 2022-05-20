@@ -95,7 +95,7 @@ class FibonacciServer: public RosActionNode<behaviortree_ros::FibonacciAction>
 
 public:
   FibonacciServer( ros::NodeHandle& handle, const std::string& name, const NodeConfiguration & conf, const std::string& server_name):
-RosActionNode<behaviortree_ros::FibonacciAction>(handle, name, conf, server_name) {}
+  RosActionNode<behaviortree_ros::FibonacciAction>(handle, name, conf, server_name) {}
 
   static PortsList providedPorts()
   {
@@ -187,7 +187,7 @@ int main(int argc, char **argv)
 
   factory.registerNodeType<PrintValue>("PrintValue");
   RegisterRosService<AddTwoIntsAction>(factory, "AddTwoInts", nh);
-  RegisterRosAction<FibonacciServer>(factory, "Fibonacci", nh, "");
+  RegisterRosAction<FibonacciServer>(factory, "Fibonacci", nh, "fibonacci");
 
   auto tree = factory.createTreeFromText(xml_text);
 
