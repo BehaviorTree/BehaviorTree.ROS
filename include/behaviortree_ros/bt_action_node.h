@@ -47,12 +47,6 @@ protected:
     action_client_ = std::make_shared<ActionClientType>( node_, server_name, true );
   }
 
-  RosActionNode(ros::NodeHandle& nh, const std::string& name, const BT::NodeConfiguration & conf, const std::string& server_name):
-  BT::ActionNodeBase(name, conf), node_(nh)
-  {
-    action_client_ = std::make_shared<ActionClientType>( node_, server_name, true );
-  }
-
 public:
 
   using BaseClass  = RosActionNode<ActionT>;
@@ -70,7 +64,7 @@ public:
   static PortsList providedPorts()
   {
     return  {
-      InputPort<std::string>("server_name", "", "name of the Action Server"),
+      InputPort<std::string>("server_name", "name of the Action Server"),
       InputPort<unsigned>("timeout", 500, "timeout to connect (milliseconds)")
       };
   }
@@ -175,29 +169,23 @@ protected:
 template <class DerivedT> static
   void RegisterRosAction(BT::BehaviorTreeFactory& factory,
                          const std::string& registration_ID,
-                         ros::NodeHandle& node_handle)
-{
-  NodeBuilder builder = [&node_handle](const std::string& name, const NodeConfiguration& config) {
-    return std::make_unique<DerivedT>(node_handle, name, config );
-  };
-
-  TreeNodeManifest manifest;
-  manifest.type = getType<DerivedT>();
-  manifest.ports = DerivedT::providedPorts();
-  manifest.registration_ID = registration_ID;
-  const auto& basic_ports = RosActionNode< typename DerivedT::ActionType>::providedPorts();
-  manifest.ports.insert( basic_ports.begin(), basic_ports.end() );
-  factory.registerBuilder( manifest, builder );
-}
-
-template <class DerivedT> static
-  void RegisterRosAction(BT::BehaviorTreeFactory& factory,
-                         const std::string& registration_ID,
                          ros::NodeHandle& node_handle,
-                         const std::string& server_name)
+                         const std::string& default_server_name = {} )
 {
-  NodeBuilder builder = [&node_handle, &server_name](const std::string& name, const NodeConfiguration& config) {
-    return std::make_unique<DerivedT>(node_handle, name, config, server_name );
+  NodeBuilder builder = [&node_handle, default_server_name](const std::string& name, const NodeConfiguration& config) {
+    return std::make_unique<DerivedT>(node_handle, name, config );
+
+    auto name_it = config.input_ports.find("server_name");
+    // The server_name passed as port has priority over the default_server_name
+    if( !default_server_name.empty() && name_it->second.empty() )
+    {
+      auto new_config = config;
+      new_config.input_ports["server_name"] = default_server_name;
+      return std::make_unique<DerivedT>(node_handle, name, new_config );
+    }
+    else{
+      return std::make_unique<DerivedT>(node_handle, name, config );
+    }
   };
 
   TreeNodeManifest manifest;

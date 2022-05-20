@@ -94,8 +94,8 @@ class FibonacciServer: public RosActionNode<behaviortree_ros::FibonacciAction>
 {
 
 public:
-  FibonacciServer( ros::NodeHandle& handle, const std::string& name, const NodeConfiguration & conf, const std::string& server_name):
-  RosActionNode<behaviortree_ros::FibonacciAction>(handle, name, conf, server_name) {}
+  FibonacciServer( ros::NodeHandle& handle, const std::string& name, const NodeConfiguration & conf):
+RosActionNode<behaviortree_ros::FibonacciAction>(handle, name, conf) {}
 
   static PortsList providedPorts()
   {
@@ -168,8 +168,7 @@ private:
 
             <RetryUntilSuccessful num_attempts="4">
                 <Timeout msec="300">
-                    <Fibonacci server_name="fibonacci" order="5"
-                               result="{fibonacci_result}" />
+                    <Fibonacci order="5" result="{fibonacci_result}" />
                 </Timeout>
             </RetryUntilSuccessful>
             <PrintValue message="{fibonacci_result}"/>
