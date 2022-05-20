@@ -169,10 +169,11 @@ protected:
 template <class DerivedT> static
   void RegisterRosAction(BT::BehaviorTreeFactory& factory,
                          const std::string& registration_ID,
-                         ros::NodeHandle& node_handle)
+                         ros::NodeHandle& node_handle,
+                         const std::string& server_name)
 {
-  NodeBuilder builder = [&node_handle](const std::string& name, const NodeConfiguration& config) {
-    return std::make_unique<DerivedT>(node_handle, name, config, "" );
+  NodeBuilder builder = [&node_handle, &server_name](const std::string& name, const NodeConfiguration& config) {
+    return std::make_unique<DerivedT>(node_handle, name, config, server_name );
   };
 
   TreeNodeManifest manifest;

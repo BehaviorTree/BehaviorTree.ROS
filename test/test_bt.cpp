@@ -187,7 +187,7 @@ int main(int argc, char **argv)
 
   factory.registerNodeType<PrintValue>("PrintValue");
   RegisterRosService<AddTwoIntsAction>(factory, "AddTwoInts", nh);
-  RegisterRosAction<FibonacciServer>(factory, "Fibonacci", nh);
+  RegisterRosAction<FibonacciServer>(factory, "Fibonacci", nh, "");
 
   auto tree = factory.createTreeFromText(xml_text);
 
