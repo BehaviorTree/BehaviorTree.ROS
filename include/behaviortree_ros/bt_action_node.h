@@ -173,19 +173,22 @@ template <class DerivedT> static
                          const std::string& default_server_name = {} )
 {
   NodeBuilder builder = [&node_handle, default_server_name](const std::string& name, const NodeConfiguration& config) {
-    return std::make_unique<DerivedT>(node_handle, name, config );
+    
+    auto server_name_port = config.input_ports.find("server_name");
+    if ((server_name_port == config.input_ports.end() || server_name_port->second.empty()) && default_server_name.empty())
+    {
+      throw std::runtime_error("server_name not given as port or default in RegisterRosAction");
+    }
 
-    auto name_it = config.input_ports.find("server_name");
     // The server_name passed as port has priority over the default_server_name
-    if( !default_server_name.empty() && name_it->second.empty() )
+    if( server_name_port == config.input_ports.end() || server_name_port->second.empty() )
     {
       auto new_config = config;
       new_config.input_ports["server_name"] = default_server_name;
       return std::make_unique<DerivedT>(node_handle, name, new_config );
     }
-    else{
-      return std::make_unique<DerivedT>(node_handle, name, config );
-    }
+    
+    return std::make_unique<DerivedT>(node_handle, name, config );
   };
 
   TreeNodeManifest manifest;
