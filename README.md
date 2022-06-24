@@ -17,4 +17,6 @@ Currently, two wrappers are provided:
 - [RosActionNode](include/behaviortree_ros/bt_action_node.h) that, similarly, is a wrapper around
   [actionlib::SimpleActionClient](http://wiki.ros.org/actionlib).
 
+Additionally, a ros logger is provided:
 
+- [RosoutLogger](include/behaviortree_ros/loggers/rosout_logger.h)

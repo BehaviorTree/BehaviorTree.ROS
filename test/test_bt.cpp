@@ -1,5 +1,6 @@
 #include <behaviortree_ros/bt_service_node.h>
 #include <behaviortree_ros/bt_action_node.h>
+#include <behaviortree_ros/loggers/rosout_logger.h>
 #include <ros/ros.h>
 #include <behaviortree_ros/AddTwoInts.h>
 #include <behaviortree_ros/FibonacciAction.h>
@@ -190,6 +191,7 @@ int main(int argc, char **argv)
   RegisterRosAction<FibonacciServer>(factory, "Fibonacci", nh);
 
   auto tree = factory.createTreeFromText(xml_text);
+  BT::RosoutLogger rosout_logger(tree);
 
   NodeStatus status = NodeStatus::IDLE;
 
