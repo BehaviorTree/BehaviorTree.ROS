@@ -73,6 +73,8 @@ target_link_libraries(test_server ${catkin_LIBRARIES} )
 ######################################################
 # INSTALL
 
+install(DIRECTORY include/${PROJECT_NAME}/
+        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
 ######################################################
 # EXAMPLES and TOOLS
