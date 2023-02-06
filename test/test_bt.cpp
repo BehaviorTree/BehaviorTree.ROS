@@ -161,15 +161,13 @@ private:
  <root >
      <BehaviorTree>
         <Sequence>
-            <AddTwoInts service_name = "add_two_ints"
-                        first_int = "3" second_int = "4"
+            <AddTwoInts first_int = "3" second_int = "4"
                         sum = "{add_two_result}" />
             <PrintValue message="{add_two_result}"/>
 
             <RetryUntilSuccessful num_attempts="4">
                 <Timeout msec="300">
-                    <Fibonacci server_name="fibonacci" order="5"
-                               result="{fibonacci_result}" />
+                    <Fibonacci order="5" result="{fibonacci_result}" />
                 </Timeout>
             </RetryUntilSuccessful>
             <PrintValue message="{fibonacci_result}"/>
@@ -186,8 +184,8 @@ int main(int argc, char **argv)
   BehaviorTreeFactory factory;
 
   factory.registerNodeType<PrintValue>("PrintValue");
-  RegisterRosService<AddTwoIntsAction>(factory, "AddTwoInts", nh);
-  RegisterRosAction<FibonacciServer>(factory, "Fibonacci", nh);
+  RegisterRosService<AddTwoIntsAction>(factory, "AddTwoInts", nh, "add_two_ints");
+  RegisterRosAction<FibonacciServer>(factory, "Fibonacci", nh, "fibonacci");
 
   auto tree = factory.createTreeFromText(xml_text);
 

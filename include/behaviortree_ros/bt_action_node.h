@@ -169,10 +169,22 @@ protected:
 template <class DerivedT> static
   void RegisterRosAction(BT::BehaviorTreeFactory& factory,
                          const std::string& registration_ID,
-                         ros::NodeHandle& node_handle)
+                         ros::NodeHandle& node_handle,
+                         const std::string& default_server_name = {} )
 {
-  NodeBuilder builder = [&node_handle](const std::string& name, const NodeConfiguration& config) {
-    return std::make_unique<DerivedT>(node_handle, name, config );
+  NodeBuilder builder = [&node_handle, default_server_name](const std::string& name, const NodeConfiguration& config) {
+    auto server_name_port = config.input_ports.find("server_name");
+    if (server_name_port != config.input_ports.end() && !server_name_port->second.empty()) {
+      return std::make_unique<DerivedT>(node_handle, name, config );
+    }
+
+    if (!default_server_name.empty()) {
+      auto new_config = config;
+      new_config.input_ports["server_name"] = default_server_name;
+      return std::make_unique<DerivedT>(node_handle, name, new_config );
+    }
+
+    throw std::runtime_error("server_name not given as port or default in RegisterRosAction");
   };
 
   TreeNodeManifest manifest;
