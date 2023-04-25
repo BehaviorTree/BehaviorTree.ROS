@@ -56,7 +56,7 @@ void RosoutLogger::callback(Duration timestamp, const TreeNode& node, NodeStatus
         ROS_INFO("[%s%s]: %s -> %s",  node_name.c_str(),
                   &whitespaces[std::min(ws_count, node_name.size())],
                   toStr(prev_status, true).c_str(),
-                  toStr(status, true).c_srt());
+                  toStr(status, true).c_str());
         break;
     }
 }
