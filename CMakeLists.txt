@@ -44,7 +44,7 @@ generate_messages(
 )
 
 catkin_package(
-    INCLUDE_DIRS include
+    INCLUDE_DIRS include include/behaviortree_ros
     LIBRARIES behaviortree_ros
     CATKIN_DEPENDS ${ROS_DEPENDENCIES}
 )
@@ -79,7 +79,8 @@ LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 install (
         DIRECTORY include/${PROJECT_NAME}/
-        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+        FILES_MATCHING PATTERN "*.h")
 
 ######################################################
 # EXAMPLES and TOOLS

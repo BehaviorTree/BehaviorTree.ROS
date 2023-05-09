@@ -1,4 +1,5 @@
 uint16         uid
+uint16         parent_uid
 uint16[]       children_uid
 int8           type
 NodeStatus     status
