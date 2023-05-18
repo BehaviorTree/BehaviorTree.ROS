@@ -59,6 +59,8 @@ include_directories( include ${catkin_INCLUDE_DIRS})
 add_library(behaviortree_ros src/loggers/rosout_logger.cpp  src/loggers/ros_topic_logger.cpp)
 target_link_libraries(behaviortree_ros ${catkin_LIBRARIES})
 
+add_dependencies(behaviortree_ros behaviortree_ros_gencpp)
+
 ######################################################
 # TESTS
 
