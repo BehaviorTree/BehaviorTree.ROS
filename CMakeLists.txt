@@ -56,8 +56,9 @@ include_directories( include ${catkin_INCLUDE_DIRS})
 
 #header only for the time being
 
-add_library(behaviortree_ros src/loggers/rosout_logger.cpp  src/loggers/ros_topic_logger.cpp)
+add_library(behaviortree_ros src/loggers/rosout_logger.cpp  src/loggers/ros_topic_logger.cpp src/recovery_node.cpp)
 target_link_libraries(behaviortree_ros ${catkin_LIBRARIES})
+target_compile_definitions(behaviortree_ros PRIVATE  BT_PLUGIN_EXPORT )
 
 add_dependencies(behaviortree_ros behaviortree_ros_gencpp)
 
