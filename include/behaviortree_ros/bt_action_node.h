@@ -84,7 +84,7 @@ public:
     REJECTED_BY_SERVER = 2
   };
 
-  /// Called when a service call failed. Can be overriden by the user.
+  /// Called when a service call failed. Can be overridden by the user.
   virtual NodeStatus onFailedRequest(FailureCause failure)
   {
     return NodeStatus::FAILURE;
@@ -138,8 +138,9 @@ protected:
 
     // Please refer to these states
 
-    if( action_state == actionlib::SimpleClientGoalState::PENDING ||
-        action_state == actionlib::SimpleClientGoalState::ACTIVE )
+    if( action_state == actionlib::SimpleClientGoalState::ACTIVE ||
+        action_state == actionlib::SimpleClientGoalState::PENDING ||
+        action_state == actionlib::SimpleClientGoalState::PREEMPTING )
     {
       return NodeStatus::RUNNING;
     }
