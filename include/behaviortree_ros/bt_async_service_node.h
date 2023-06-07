@@ -37,7 +37,10 @@ protected:
    }
 
   RosAsyncServiceNode(ros::NodeHandle& nh,const std::string& service_name, ros::Duration timeout, const std::string& name, const BT::NodeConfiguration & conf):
-   BT::ActionNodeBase(name, conf), node_(nh) { 
+   BT::ActionNodeBase(name, conf), node_(nh) ,service_name_(service_name), timeout_(timeout) { 
+      std::cout << "RosAsyncServiceNode constructor" << std::endl;
+      std::cout << "service_name: " << service_name << std::endl;
+      service_client_ = node_.serviceClient<ServiceT>( service_name_ );
    }
 
 public:
@@ -113,7 +116,7 @@ protected:
       service_client_ = node_.serviceClient<ServiceT>( service_name_ );
     }
 
-
+    std::cout  <<"service name "<<service_name_<<std::endl;
     // first step to be done only at the beginning of the Action
     if (status() == BT::NodeStatus::IDLE) {
       // setting the status to RUNNING to notify the BT Loggers (if any)
@@ -157,7 +160,7 @@ template <class DerivedT> static
                      const std::string& registration_ID,
                      ros::NodeHandle& node_handle, std::string service_name, ros::Duration timeout)
 {
-  NodeBuilder builder = [&node_handle, &service_name , &timeout](const std::string& name, const NodeConfiguration& config) {
+  NodeBuilder builder = [&node_handle, service_name , timeout](const std::string& name, const NodeConfiguration& config) {
     return std::make_unique<DerivedT>(node_handle,  service_name, timeout, name, config );
   };
 
