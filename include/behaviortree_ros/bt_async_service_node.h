@@ -116,7 +116,6 @@ protected:
       service_client_ = node_.serviceClient<ServiceT>( service_name_ );
     }
 
-    std::cout  <<"service name "<<service_name_<<std::endl;
     // first step to be done only at the beginning of the Action
     if (status() == BT::NodeStatus::IDLE) {
       // setting the status to RUNNING to notify the BT Loggers (if any)
