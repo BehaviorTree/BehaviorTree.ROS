@@ -16,8 +16,8 @@
 #ifndef BEHAVIOR_TREE_BT_SERVICE_NODE_HPP_
 #define BEHAVIOR_TREE_BT_SERVICE_NODE_HPP_
 
-#include <behaviortree_cpp_v3/action_node.h>
-#include <behaviortree_cpp_v3/bt_factory.h>
+#include <behaviortree_cpp/action_node.h>
+#include <behaviortree_cpp/bt_factory.h>
 #include <ros/ros.h>
 #include <ros/service_client.h>
 

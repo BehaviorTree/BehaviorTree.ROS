@@ -16,10 +16,10 @@
 #ifndef BEHAVIOR_TREE_BT_ACTION_NODE_HPP_
 #define BEHAVIOR_TREE_BT_ACTION_NODE_HPP_
 
-#include <behaviortree_cpp_v3/action_node.h>
-#include <behaviortree_cpp_v3/bt_factory.h>
-#include <ros/ros.h>
 #include <actionlib/client/simple_action_client.h>
+#include <behaviortree_cpp/action_node.h>
+#include <behaviortree_cpp/bt_factory.h>
+#include <ros/ros.h>
 
 namespace BT
 {
@@ -100,7 +100,6 @@ public:
     {
       action_client_->cancelGoal();
     }
-    setStatus(NodeStatus::IDLE);
   }
 
 protected:
