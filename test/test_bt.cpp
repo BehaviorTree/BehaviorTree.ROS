@@ -157,9 +157,9 @@ private:
 //-----------------------------------------------------
 
   // Simple tree, used to execute once each action.
-  static const char* xml_text = R"(
- <root >
-     <BehaviorTree>
+static const char* xml_text = R"(
+<root BTCPP_format="4" >
+     <BehaviorTree ID="MainTree">
         <Sequence>
             <AddTwoInts service_name = "add_two_ints"
                         first_int = "3" second_int = "4"
@@ -196,7 +196,7 @@ int main(int argc, char **argv)
   while( ros::ok() && (status == NodeStatus::IDLE || status == NodeStatus::RUNNING))
   {
     ros::spinOnce();
-    status = tree.tickRoot();
+    status = tree.tickExactlyOnce();
     std::cout << status << std::endl;
     ros::Duration sleep_time(0.01);
     sleep_time.sleep();
